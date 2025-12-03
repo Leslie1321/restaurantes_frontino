@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Lista de Restaurantes</h2>
+
+    {% if current_role == "admin" %}
+    <a class="btn btn-primary" href="{{ url_for('add_form') }}">Agregar Restaurante</a>
+    {% endif %}
+</div>
+
+<!-- BARRA DE BÚSQUEDA -->
+<form method="GET" action="/" class="d-flex mb-3">
+    <input type="text" name="q" class="form-control me-2"
+           placeholder="Buscar restaurante..." value="{{ search }}">
+    <button class="btn btn-outline-primary">Buscar</button>
+</form>
+
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+
+            {% if current_role == "admin" %}
+            <th>Acciones</th>
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for r in restaurantes %}
+        <tr>
+            <td>
+                {% if r.foto %}
+                <img src="{{ url_for('static', filename='uploads/' + r.foto) }}" width="80">
+                {% else %}
+                <span class="text-muted">Sin foto</span>
+                {% endif %}
+            </td>
+
+            <td>{{ r.nombre }}</td>
+            <td>{{ r.direccion }}</td>
+            <td>{{ r.telefono }}</td>
+
+            {% if current_role == "admin" %}
+            <td>
+                <a class="btn btn-warning btn-sm" href="{{ url_for('edit', id=r.id) }}">Editar</a>
+                <a class="btn btn-danger btn-sm" href="{{ url_for('delete', id=r.id) }}"
+                   onclick="return confirm('¿Eliminar restaurante?');">Eliminar</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

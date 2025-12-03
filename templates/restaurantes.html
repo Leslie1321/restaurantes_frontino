@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<center><h3 class="mb-3">Restaurantes Frontino</h3></center>
+
+{% if current_role == "admin" %}
+<form class="card p-3 mb-4" method="POST" action="{{ url_for('add') }}">
+    <h5>Agregar Restaurante</h5>
+
+    <div class="row g-2">
+        <div class="col-md-4"><input class="form-control" name="nombre" placeholder="Nombre" required></div>
+        <div class="col-md-4"><input class="form-control" name="direccion" placeholder="Dirección" required></div>
+        <div class="col-md-4"><input class="form-control" name="telefono" placeholder="Teléfono" required></div>
+    </div>
+
+    <button class="btn btn-primary mt-2">Guardar</button>
+</form>
+{% endif %}
+
+<table class="table table-bordered table-striped">
+
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Teléfono</th>
+
+        {% if current_role == "admin" %}
+        <th>Acciones</th>
+        {% endif %}
+    </tr>
+
+    {% for r in restaurantes %}
+    <tr>
+        <td>{{ r[0] }}</td>
+        <td>{{ r[1] }}</td>
+        <td>{{ r[2] }}</td>
+        <td>{{ r[3] }}</td>
+
+        {% if current_role == "admin" %}
+        <td>
+            <a href="{{ url_for('edit', id=r[0]) }}" class="btn btn-warning btn-sm">Editar</a>
+            <a href="{{ url_for('delete', id=r[0]) }}" class="btn btn-danger btn-sm">Eliminar</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
+
